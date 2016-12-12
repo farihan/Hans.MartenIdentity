@@ -4,6 +4,7 @@ using Hans.AspNetCore.Identity.Marten.Data.Domains;
 using Hans.AspNetCore.Identity.Marten.Data.Persistence;
 using Hans.AspNetCore.Identity.Marten.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Hans.AspNetCore.Identity.Marten.Tests
 {
@@ -17,7 +18,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
         }
 
         [TestMethod]
-        public void CanRoles()
+        public async void CanRoles()
         {
             var store = new RoleStore<IdentityRole>(DocStore);
 
@@ -29,18 +30,18 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
             var role5 = new IdentityRole("Role5");
 
             // act
-            store.CreateAsync(role1);
-            store.CreateAsync(role2);
-            store.CreateAsync(role3);
-            store.CreateAsync(role4);
-            store.CreateAsync(role5);
+            await store.CreateAsync(role1);
+            await store.CreateAsync(role2);
+            await store.CreateAsync(role3);
+            await store.CreateAsync(role4);
+            await store.CreateAsync(role5);
 
             // assert
             Assert.AreEqual(5, store.Roles.Count());
         }
 
         [TestMethod]
-        public void CanCreateUpdateDeleteRole()
+        public async void CanCreateUpdateDeleteRole()
         {
             var store = new RoleStore<IdentityRole>(DocStore);
 
@@ -48,20 +49,20 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
             var role1 = new IdentityRole("Role1");
 
             // act
-            store.CreateAsync(role1);
+            await store.CreateAsync(role1);
             var r1 = store.Roles.FirstOrDefault();
 
             // assert
             Assert.AreEqual(role1.Id, r1.Id);
 
             r1.Name = "Role2";
-            store.UpdateAsync(r1);
+            await store.UpdateAsync(r1);
             var r2 = store.Roles.FirstOrDefault();
 
             // assert
             Assert.AreEqual(r1.Name, r2.Name);
 
-            store.DeleteAsync(r1);
+            await store.DeleteAsync(r1);
             var r3 = store.Roles.FirstOrDefault();
 
             // assert
@@ -69,7 +70,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
         }
 
         [TestMethod]
-        public void CanFindByIdAsync()
+        public async void CanFindByIdAsync()
         {
             var store = new RoleStore<IdentityRole>(DocStore);
 
@@ -77,7 +78,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
             var role1 = new IdentityRole("Role1");
 
             // act
-            store.CreateAsync(role1);
+            await store.CreateAsync(role1);
 
             var r = store.FindByIdAsync(role1.Id);
 
@@ -86,7 +87,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
         }
 
         [TestMethod]
-        public void CanFindByNameAsync()
+        public async void CanFindByNameAsync()
         {
             var lookup = new LowerInvariantLookupNormalizer();
             var store = new RoleStore<IdentityRole>(DocStore);
@@ -96,7 +97,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
             role1.NormalizedName = lookup.Normalize(role1.Name);
 
             // act
-            store.CreateAsync(role1);
+            await store.CreateAsync(role1);
 
             var r = store.FindByNameAsync(role1.NormalizedName);
 

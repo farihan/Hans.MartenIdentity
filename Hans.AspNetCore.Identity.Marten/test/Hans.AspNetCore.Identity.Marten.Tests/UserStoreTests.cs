@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Hans.AspNetCore.Identity.Marten.Data;
+using System.Threading.Tasks;
 
 namespace Hans.AspNetCore.Identity.Marten.Tests
 {
@@ -20,7 +21,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
         }
 
         [TestMethod]
-        public void CanUsers()
+        public async void CanUsersAsync()
         {
             var store = new UserStore<IdentityUser>(DocStore);
 
@@ -44,9 +45,9 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
             };
 
             // act
-            store.CreateAsync(user1);
-            store.CreateAsync(user2);
-            store.CreateAsync(user3);
+            await store.CreateAsync(user1);
+            await store.CreateAsync(user2);
+            await store.CreateAsync(user3);
 
             // assert
             Assert.AreEqual(3, store.Users.Count());
@@ -102,7 +103,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
         }
 
         [TestMethod]
-        public void CanAddGetRoleAysnc()
+        public async void CanAddGetRoleAysnc()
         {
             var roleStore = new RoleStore<IdentityRole>(DocStore);
             var store = new UserStore<IdentityUser>(DocStore);
@@ -117,9 +118,9 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
             var role1 = new IdentityRole("Role1");
 
             // act
-            roleStore.CreateAsync(role1);
+            await roleStore.CreateAsync(role1);
 
-            store.AddToRoleAsync(user1, "Role1");
+            await store.AddToRoleAsync(user1, "Role1");
 
             var r = store.GetRolesAsync(user1);
 
@@ -128,7 +129,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
         }
 
         [TestMethod]
-        public void CanCreateUpdateDeleteUser()
+        public async void CanCreateUpdateDeleteUser()
         {
             var store = new UserStore<IdentityUser>(DocStore);
 
@@ -140,7 +141,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
             };
 
             // act
-            store.CreateAsync(user1);
+            await store.CreateAsync(user1);
 
             var r1 = store.FindByIdAsync(user1.Id);
             r1.Result.Email = "user1updated@user.com";
@@ -148,14 +149,14 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
             // assert
             Assert.AreEqual("User1", r1.Result.UserName);
 
-            store.UpdateAsync(r1.Result);
+            await store.UpdateAsync(r1.Result);
 
             var r2 = store.FindByIdAsync(user1.Id);
 
             // assert
             Assert.AreEqual("user1updated@user.com", r1.Result.Email);
 
-            store.DeleteAsync(r1.Result);
+            await store.DeleteAsync(r1.Result);
 
             var r3 = store.FindByIdAsync(user1.Id);
 
@@ -164,7 +165,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
         }
 
         [TestMethod]
-        public void CanFindByEmailAsync()
+        public async void CanFindByEmailAsync()
         {
             var lookup = new LowerInvariantLookupNormalizer();
             var store = new UserStore<IdentityUser>(DocStore);
@@ -176,10 +177,10 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
                 EmailConfirmed = true
             };
 
-            store.SetNormalizedEmailAsync(user1, lookup.Normalize(user1.Email));
+            await store.SetNormalizedEmailAsync(user1, lookup.Normalize(user1.Email));
 
             // act
-            store.CreateAsync(user1);
+            await store.CreateAsync(user1);
 
             var r = store.FindByEmailAsync(user1.NormalizedEmail);
 
@@ -188,7 +189,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
         }
 
         [TestMethod]
-        public void CanFindByIdAsync()
+        public async void CanFindByIdAsync()
         {
             var store = new UserStore<IdentityUser>(DocStore);
 
@@ -200,7 +201,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
             };
 
             // act
-            store.CreateAsync(user1);
+            await store.CreateAsync(user1);
 
             var r = store.FindByIdAsync(user1.Id);
 
@@ -209,7 +210,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
         }
 
         [TestMethod]
-        public void CanFindByLoginAsync()
+        public async void CanFindByLoginAsync()
         {
             var store = new UserStore<IdentityUser>(DocStore);
 
@@ -222,9 +223,9 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
 
             var login1 = new UserLoginInfo("LoginProvider1", "ProviderKey1", "DisplayNam1");
 
-            store.AddLoginAsync(user1, login1);
+            await store.AddLoginAsync(user1, login1);
 
-            store.CreateAsync(user1);
+            await store.CreateAsync(user1);
 
             // act
             var r = store.FindByLoginAsync("LoginProvider1", "ProviderKey1");
@@ -235,7 +236,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
         }
 
         [TestMethod]
-        public void CanFindByNameAsync()
+        public async void CanFindByNameAsync()
         {
             var lookup = new LowerInvariantLookupNormalizer();
             var store = new UserStore<IdentityUser>(DocStore);
@@ -247,9 +248,9 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
                 EmailConfirmed = true
             };
 
-            store.SetNormalizedUserNameAsync(user1, lookup.Normalize(user1.UserName));
+            await store.SetNormalizedUserNameAsync(user1, lookup.Normalize(user1.UserName));
 
-            store.CreateAsync(user1);
+            await store.CreateAsync(user1);
             // act
             var r = store.FindByNameAsync(user1.NormalizedUserName);
 
@@ -539,7 +540,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
         }
 
         [TestMethod]
-        public void CanGetUsersForClaimAsync()
+        public async void CanGetUsersForClaimAsync()
         {
             var store = new UserStore<IdentityUser>(DocStore);
 
@@ -556,8 +557,8 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
             list.Add(claim1);
 
             // act
-            store.AddClaimsAsync(user1, list);
-            store.CreateAsync(user1);
+            await store.AddClaimsAsync(user1, list);
+            await store.CreateAsync(user1);
 
             var r = store.GetUsersForClaimAsync(claim1);
 
@@ -566,7 +567,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
         }
 
         [TestMethod]
-        public void CanGetUsersInRoleAsync()
+        public async void CanGetUsersInRoleAsync()
         {
             var roleStore = new RoleStore<IdentityRole>(DocStore);
             var store = new UserStore<IdentityUser>(DocStore);
@@ -581,9 +582,9 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
             var role1 = new IdentityRole("Role1");
 
             // act
-            roleStore.CreateAsync(role1);
-            store.AddToRoleAsync(user1, "Role1");
-            store.CreateAsync(user1);
+            await roleStore.CreateAsync(role1);
+            await store.AddToRoleAsync(user1, "Role1");
+            await store.CreateAsync(user1);
 
             var r = store.GetUsersInRoleAsync("Role1");
 
@@ -632,7 +633,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
         }
 
         [TestMethod]
-        public void CanIsInRoleAsync()
+        public async void CanIsInRoleAsync()
         {
             var roleStore = new RoleStore<IdentityRole>(DocStore);
             var store = new UserStore<IdentityUser>(DocStore);
@@ -647,9 +648,9 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
             var role1 = new IdentityRole("Role1");
 
             // act
-            roleStore.CreateAsync(role1);
-            store.AddToRoleAsync(user1, "Role1");
-            store.CreateAsync(user1);
+            await roleStore.CreateAsync(role1);
+            await store.AddToRoleAsync(user1, "Role1");
+            await store.CreateAsync(user1);
 
             var r = store.IsInRoleAsync(user1, "Role1");
 
@@ -709,7 +710,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
         }
 
         [TestMethod]
-        public void CanRemoveFromRoleAsync()
+        public async void CanRemoveFromRoleAsync()
         {
             var roleStore = new RoleStore<IdentityRole>(DocStore);
             var store = new UserStore<IdentityUser>(DocStore);
@@ -724,10 +725,10 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
             var role1 = new IdentityRole("Role1");
 
             // act
-            roleStore.CreateAsync(role1);
+            await roleStore.CreateAsync(role1);
 
-            store.AddToRoleAsync(user1, "Role1");
-            store.RemoveFromRoleAsync(user1, "Role1");
+            await store.AddToRoleAsync(user1, "Role1");
+            await store.RemoveFromRoleAsync(user1, "Role1");
 
             var r = store.GetRolesAsync(user1);
 
@@ -789,7 +790,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
         }
 
         [TestMethod]
-        public void CanSetGetTokenAsync()
+        public async void CanSetGetTokenAsync()
         {
             var store = new UserStore<IdentityUser>(DocStore);
 
@@ -809,8 +810,8 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
             };
 
             // act
-            store.SetTokenAsync(user1, token1.LoginProvider, token1.Name, token1.Value);
-            store.CreateAsync(user1);
+            await store.SetTokenAsync(user1, token1.LoginProvider, token1.Name, token1.Value);
+            await store.CreateAsync(user1);
 
             var r = store.GetTokenAsync(user1, token1.LoginProvider, token1.Name);
 
@@ -819,7 +820,7 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
         }
 
         [TestMethod]
-        public void CanRemoveTokenAsync()
+        public async void CanRemoveTokenAsync()
         {
             var store = new UserStore<IdentityUser>(DocStore);
 
@@ -839,10 +840,10 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
             };
 
             // act
-            store.SetTokenAsync(user1, token1.LoginProvider, token1.Name, token1.Value);
-            store.CreateAsync(user1);
+            await store.SetTokenAsync(user1, token1.LoginProvider, token1.Name, token1.Value);
+            await store.CreateAsync(user1);
 
-            store.RemoveTokenAsync(user1, token1.LoginProvider, token1.Name);
+            await store.RemoveTokenAsync(user1, token1.LoginProvider, token1.Name);
             var r = store.GetTokenAsync(user1, token1.LoginProvider, token1.Name);
 
             // assert

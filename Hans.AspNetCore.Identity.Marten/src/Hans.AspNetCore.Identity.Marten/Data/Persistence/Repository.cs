@@ -74,5 +74,61 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
                 session.SaveChanges();
             }
         }
+
+
+
+        public Task DeleteAsync(TDomain instance)
+        {
+            using (IDocumentSession session = store.LightweightSession())
+            {
+                session.Delete(instance);
+
+                return session.SaveChangesAsync();
+            }
+        }
+
+        public Task<IList<TDomain>> FindAllAsync()
+        {
+            using (IQuerySession session = store.QuerySession())
+            {
+                return session.Query<TDomain>().ToListAsync();
+            }
+        }
+
+        public Task<IList<TDomain>> FindAllByAsync(Expression<Func<TDomain, bool>> where)
+        {
+            using (IQuerySession session = store.QuerySession())
+            {
+                return session.Query<TDomain>().Where(where).ToListAsync();
+            }
+        }
+
+        public Task<TDomain> FindOneByAsync(Expression<Func<TDomain, bool>> where)
+        {
+            using (IQuerySession session = store.QuerySession())
+            {
+                return session.Query<TDomain>().SingleOrDefaultAsync(where);
+            }
+        }
+
+        public Task SaveAsync(TDomain instance)
+        {
+            using (IDocumentSession session = store.LightweightSession())
+            {
+                session.Store(instance);
+
+                return session.SaveChangesAsync();
+            }
+        }
+
+        public Task UpdateAsync(TDomain instance)
+        {
+            using (IDocumentSession session = store.LightweightSession())
+            {
+                session.Store(instance);
+
+                return session.SaveChangesAsync();
+            }
+        }
     }
 }
