@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.25920.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C4C81510-03B2-4B3C-87F0-F2DB2867D200}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hans.AspNetCore.Identity.Marten", "src\Hans.AspNetCore.Identity.Marten\Hans.AspNetCore.Identity.Marten.csproj", "{0510B044-08E9-41AC-9ED6-A6CD4C9007B3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{94455C7B-FDE0-49D1-8453-69425F1FEAB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hans.AspNetCore.Identity.Marten.Tests", "test\Hans.AspNetCore.Identity.Marten.Tests\Hans.AspNetCore.Identity.Marten.Tests.csproj", "{F1CC51EE-DA44-4A9F-B3B3-039EC7057007}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0510B044-08E9-41AC-9ED6-A6CD4C9007B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0510B044-08E9-41AC-9ED6-A6CD4C9007B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0510B044-08E9-41AC-9ED6-A6CD4C9007B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0510B044-08E9-41AC-9ED6-A6CD4C9007B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1CC51EE-DA44-4A9F-B3B3-039EC7057007}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1CC51EE-DA44-4A9F-B3B3-039EC7057007}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1CC51EE-DA44-4A9F-B3B3-039EC7057007}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1CC51EE-DA44-4A9F-B3B3-039EC7057007}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0510B044-08E9-41AC-9ED6-A6CD4C9007B3} = {C4C81510-03B2-4B3C-87F0-F2DB2867D200}
+		{F1CC51EE-DA44-4A9F-B3B3-039EC7057007} = {94455C7B-FDE0-49D1-8453-69425F1FEAB8}
+	EndGlobalSection
+EndGlobal
