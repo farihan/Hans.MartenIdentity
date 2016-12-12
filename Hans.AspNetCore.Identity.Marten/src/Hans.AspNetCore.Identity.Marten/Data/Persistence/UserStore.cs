@@ -60,7 +60,6 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
             {
                 user.Claims.Add(new IdentityUserClaim()
                 {
-                    //User = user,
                     ClaimType = claim.Type,
                     ClaimValue = claim.Value
                 });
@@ -112,14 +111,6 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
             {
                 throw new InvalidOperationException(string.Format("Role {0} does not exist", nameof(roleName)));
             }
-
-            //var userRoles = new IdentityUserRole()
-            //{
-            //    UserId = user.Id,
-            //    RoleId = identityRole.Id,
-            //    Role = identityRole,
-            //    User = user
-            //};
 
             user.Roles.Add(identityRole);
 

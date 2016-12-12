@@ -11,8 +11,6 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Domains
         public virtual string ConcurrencyStamp { get; set; } = Guid.NewGuid().ToString();
         public virtual string Name { get; set; }
         public virtual string NormalizedName { get; set; }
-
-        //public virtual ICollection<IdentityUserRole> Users { get; set; }
         public virtual ICollection<IdentityRoleClaim> Claims { get; set; }
 
         public IdentityRole()
