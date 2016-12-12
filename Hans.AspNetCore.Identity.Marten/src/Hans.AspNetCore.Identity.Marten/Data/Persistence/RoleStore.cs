@@ -36,10 +36,8 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
                 throw new ArgumentNullException(nameof(role));
             }
 
-            //repository.Save(role);
-            //return Task.FromResult(IdentityResult.Success);
+            await repository.SaveAsync(role, cancellationToken);
 
-            await repository.SaveAsync(role);
             return IdentityResult.Success;
         }
 
@@ -52,10 +50,8 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
                 throw new ArgumentNullException(nameof(role));
             }
 
-            //repository.Delete(role);
-            //return Task.FromResult(IdentityResult.Success);
+            await repository.DeleteAsync(role, cancellationToken);
 
-            await repository.DeleteAsync(role);
             return IdentityResult.Success;
         }
 
@@ -67,15 +63,15 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
         public Task<TDomain> FindByIdAsync(string roleId, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            //return Task.FromResult(repository.FindOneBy(x => x.Id.ToLower() == roleId.ToLower()));
-            return repository.FindOneByAsync(x => x.Id.ToLower() == roleId.ToLower());
+
+            return repository.FindOneByAsync(x => x.Id.ToLower() == roleId.ToLower(), cancellationToken);
         }
 
         public Task<TDomain> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            //return Task.FromResult(repository.FindOneBy(x => x.Name.ToLower() == normalizedRoleName.ToLower()));
-            return repository.FindOneByAsync(x => x.Name.ToLower() == normalizedRoleName.ToLower());
+
+            return repository.FindOneByAsync(x => x.Name.ToLower() == normalizedRoleName.ToLower(), cancellationToken);
         }
 
         public Task<string> GetNormalizedRoleNameAsync(TDomain role, CancellationToken cancellationToken = default(CancellationToken))
@@ -151,10 +147,8 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
                 throw new ArgumentNullException(nameof(role));
             }
 
-            //repository.Update(role);
-            //return Task.FromResult(IdentityResult.Success);
+            await repository.UpdateAsync(role, cancellationToken);
 
-            await repository.UpdateAsync(role);
             return IdentityResult.Success;
         }
     }

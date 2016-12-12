@@ -37,19 +37,6 @@ namespace Hans.AspNetCore.Identity.Marten.Tests
             DocStore = DocumentStore.For(Connection);
         }
 
-        protected void CreateDatabase(string connection)
-        {
-            //var configuration = Fluently.Configure()
-            //    .Database(MsSqlConfiguration.MsSql2012.ConnectionString(connection).ShowSql)
-            //    .Mappings(m => m.FluentMappings.AddFromAssembly(Assembly.Load("Hans.AspNetCore.Identity.NHibernate")))
-            //    .BuildConfiguration();
-
-            //var exporter = new SchemaExport(configuration);
-
-            //exporter.Drop(true, true);
-            //exporter.Create(true, true);
-        }
-
         protected RoleManager<IdentityRole> GetRoleManager(IDocumentStore document)
         {
             var store = new RoleStore<IdentityRole>(document);

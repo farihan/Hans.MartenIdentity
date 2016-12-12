@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
@@ -77,7 +78,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
 
 
 
-        public Task DeleteAsync(TDomain instance)
+        public Task DeleteAsync(TDomain instance, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (IDocumentSession session = store.LightweightSession())
             {
@@ -87,7 +88,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
             }
         }
 
-        public Task<IList<TDomain>> FindAllAsync()
+        public Task<IList<TDomain>> FindAllAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             using (IQuerySession session = store.QuerySession())
             {
@@ -95,7 +96,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
             }
         }
 
-        public Task<IList<TDomain>> FindAllByAsync(Expression<Func<TDomain, bool>> where)
+        public Task<IList<TDomain>> FindAllByAsync(Expression<Func<TDomain, bool>> where, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (IQuerySession session = store.QuerySession())
             {
@@ -103,7 +104,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
             }
         }
 
-        public Task<TDomain> FindOneByAsync(Expression<Func<TDomain, bool>> where)
+        public Task<TDomain> FindOneByAsync(Expression<Func<TDomain, bool>> where, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (IQuerySession session = store.QuerySession())
             {
@@ -111,7 +112,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
             }
         }
 
-        public Task SaveAsync(TDomain instance)
+        public Task SaveAsync(TDomain instance, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (IDocumentSession session = store.LightweightSession())
             {
@@ -121,7 +122,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
             }
         }
 
-        public Task UpdateAsync(TDomain instance)
+        public Task UpdateAsync(TDomain instance, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (IDocumentSession session = store.LightweightSession())
             {
