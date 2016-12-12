@@ -84,7 +84,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
             {
                 session.Delete(instance);
 
-                return session.SaveChangesAsync();
+                return session.SaveChangesAsync(cancellationToken);
             }
         }
 
@@ -92,7 +92,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
         {
             using (IQuerySession session = store.QuerySession())
             {
-                return session.Query<TDomain>().ToListAsync();
+                return session.Query<TDomain>().ToListAsync(cancellationToken);
             }
         }
 
@@ -100,7 +100,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
         {
             using (IQuerySession session = store.QuerySession())
             {
-                return session.Query<TDomain>().Where(where).ToListAsync();
+                return session.Query<TDomain>().Where(where).ToListAsync(cancellationToken);
             }
         }
 
@@ -108,7 +108,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
         {
             using (IQuerySession session = store.QuerySession())
             {
-                return session.Query<TDomain>().SingleOrDefaultAsync(where);
+                return session.Query<TDomain>().SingleOrDefaultAsync(where, cancellationToken);
             }
         }
 
@@ -118,7 +118,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
             {
                 session.Store(instance);
 
-                return session.SaveChangesAsync();
+                return session.SaveChangesAsync(cancellationToken);
             }
         }
 
@@ -128,7 +128,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
             {
                 session.Store(instance);
 
-                return session.SaveChangesAsync();
+                return session.SaveChangesAsync(cancellationToken);
             }
         }
     }
