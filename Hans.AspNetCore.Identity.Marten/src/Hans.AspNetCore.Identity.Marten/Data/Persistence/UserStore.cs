@@ -91,7 +91,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
             return Task.FromResult(false);
         }
 
-        public async Task AddToRoleAsync(TDomain user, string roleName, CancellationToken cancellationToken = default(CancellationToken))
+        public Task AddToRoleAsync(TDomain user, string roleName, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -105,7 +105,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
                 throw new ArgumentException("Value cannot be null or empty.", nameof(roleName));
             }
 
-            var identityRole = await roleRepository.FindOneByAsync(x => x.Name.ToLower() == roleName.ToLower(), cancellationToken);
+            var identityRole = roleRepository.FindOneBy(x => x.Name.ToLower() == roleName.ToLower());
 
             if (identityRole == null)
             {
@@ -113,9 +113,11 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
             }
 
             user.Roles.Add(identityRole);
+
+            return Task.FromResult(false);
         }
 
-        public async Task<IdentityResult> CreateAsync(TDomain user, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<IdentityResult> CreateAsync(TDomain user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -124,12 +126,12 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
                 throw new ArgumentNullException(nameof(user));
             }
 
-            await userRepository.SaveAsync(user, cancellationToken);
+            userRepository.Save(user);
 
-            return IdentityResult.Success;
+            return Task.FromResult(IdentityResult.Success);
         }
 
-        public async Task<IdentityResult> DeleteAsync(TDomain user, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<IdentityResult> DeleteAsync(TDomain user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -138,9 +140,9 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
                 throw new ArgumentNullException(nameof(user));
             }
 
-            await userRepository.DeleteAsync(user, cancellationToken);
+            userRepository.Delete(user);
 
-            return IdentityResult.Success;
+            return Task.FromResult(IdentityResult.Success);
         }
 
         public void Dispose()
@@ -152,31 +154,31 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
         {
             cancellationToken.ThrowIfCancellationRequested();
             
-            return userRepository.FindOneByAsync(x => x.NormalizedEmail.ToLower() == normalizedEmail.ToLower(), cancellationToken);
+            return Task.FromResult(userRepository.FindOneBy(x => x.NormalizedEmail.ToLower() == normalizedEmail.ToLower()));
         }
 
         public Task<TDomain> FindByIdAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
             
-            return userRepository.FindOneByAsync(x => x.Id.ToLower() == userId.ToLower(), cancellationToken);
+            return Task.FromResult(userRepository.FindOneBy(x => x.Id.ToLower() == userId.ToLower()));
         }
 
-        public async Task<TDomain> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<TDomain> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var userLogins = await userRepository.FindAllByAsync(x => x.Logins
-                .Any(l => l.LoginProvider == loginProvider && l.ProviderKey == providerKey), cancellationToken);
+            var userLogins = userRepository.FindAllBy(x => x.Logins
+                .Any(l => l.LoginProvider == loginProvider && l.ProviderKey == providerKey));
 
-            return userLogins.FirstOrDefault();
+            return Task.FromResult(userLogins.FirstOrDefault());
         }
 
         public Task<TDomain> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            return userRepository.FindOneByAsync(x => x.NormalizedUserName.ToLower() == normalizedUserName.ToLower(), cancellationToken);
+            return Task.FromResult(userRepository.FindOneBy(x => x.NormalizedUserName.ToLower() == normalizedUserName.ToLower()));
         }
 
         public Task<int> GetAccessFailedCountAsync(TDomain user, CancellationToken cancellationToken = default(CancellationToken))
@@ -363,7 +365,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
             return Task.FromResult(user.SecurityStamp);
         }
 
-        public async Task<string> GetTokenAsync(TDomain user, string loginProvider, string name, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<string> GetTokenAsync(TDomain user, string loginProvider, string name, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -372,16 +374,16 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
                 throw new ArgumentNullException(nameof(user));
             }
 
-            var matchedToken = await tokenRepository.FindOneByAsync(x => x.UserId.Equals(user.Id) &&
+            var matchedToken = tokenRepository.FindOneBy(x => x.UserId.Equals(user.Id) &&
                 x.LoginProvider == loginProvider &&
-                x.Name == name, cancellationToken);
+                x.Name == name);
 
             if (matchedToken != null)
             {
-                return matchedToken.Value;
+                return Task.FromResult(matchedToken.Value);
             }
 
-            return string.Empty;
+            return Task.FromResult(string.Empty);
         }
 
         public Task<bool> GetTwoFactorEnabledAsync(TDomain user, CancellationToken cancellationToken = default(CancellationToken))
@@ -420,7 +422,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
             return Task.FromResult(user.UserName);
         }
 
-        public async Task<IList<TDomain>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<IList<TDomain>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -429,13 +431,14 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
                 throw new ArgumentNullException(nameof(claim));
             }
 
-            var users = await userRepository.FindAllByAsync(x => x.Claims
-                .Any(c => c.ClaimValue == claim.Value && c.ClaimType == claim.Type), cancellationToken);
+            var users = userRepository.FindAllBy(x => x.Claims
+                .Any(c => c.ClaimValue == claim.Value && c.ClaimType == claim.Type))
+                .Select(x => x);
 
-            return users;
+            return Task.FromResult<IList<TDomain>>(users.ToList());
         }
 
-        public async Task<IList<TDomain>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<IList<TDomain>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -444,10 +447,11 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
                 throw new ArgumentNullException(nameof(roleName));
             }
 
-            var users = await userRepository.FindAllByAsync(x => x.Roles
-                .Any(r => r.Name.ToLower() == roleName.ToLower()), cancellationToken);
+            var users = userRepository.FindAllBy(x => x.Roles
+                .Any(r => r.Name.ToLower() == roleName.ToLower()))
+                .Select(x => x);
 
-            return users;
+            return Task.FromResult<IList<TDomain>>(users.ToList());
         }
 
         public Task<bool> HasPasswordAsync(TDomain user, CancellationToken cancellationToken = default(CancellationToken))
@@ -556,7 +560,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
             return Task.FromResult(0);
         }
 
-        public async Task RemoveTokenAsync(TDomain user, string loginProvider, string name, CancellationToken cancellationToken = default(CancellationToken))
+        public Task RemoveTokenAsync(TDomain user, string loginProvider, string name, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -565,14 +569,16 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
                 throw new ArgumentNullException(nameof(user));
             }
 
-            var matchedToken = await tokenRepository.FindOneByAsync(x => x.UserId.Equals(user.Id) &&
+            var matchedToken = tokenRepository.FindOneBy(x => x.UserId.Equals(user.Id) &&
                 x.LoginProvider == loginProvider &&
-                x.Name == name, cancellationToken);
+                x.Name == name);
 
             if (matchedToken != null)
             {
                 tokenRepository.Delete(matchedToken);
             }
+
+            return Task.FromResult(0);
         }
 
         public Task ReplaceClaimAsync(TDomain user, Claim claim, Claim newClaim, CancellationToken cancellationToken = default(CancellationToken))
@@ -758,7 +764,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
             return Task.FromResult(0);
         }
 
-        public async Task SetTokenAsync(TDomain user, string loginProvider, string name, string value, CancellationToken cancellationToken = default(CancellationToken))
+        public Task SetTokenAsync(TDomain user, string loginProvider, string name, string value, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -767,9 +773,9 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
                 throw new ArgumentNullException(nameof(user));
             }
 
-            var matchedToken = await tokenRepository.FindOneByAsync(x => x.UserId.Equals(user.Id) &&
+            var matchedToken = tokenRepository.FindOneBy(x => x.UserId.Equals(user.Id) &&
                 x.LoginProvider == loginProvider &&
-                x.Name == name, cancellationToken);
+                x.Name == name);
 
             if (matchedToken == null)
             {
@@ -783,6 +789,8 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
 
                 tokenRepository.Save(token);
             }
+
+            return Task.FromResult(0);
         }
 
         public Task SetTwoFactorEnabledAsync(TDomain user, bool enabled, CancellationToken cancellationToken = default(CancellationToken))
@@ -813,7 +821,7 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
             return Task.FromResult(0);
         }
 
-        public async Task<IdentityResult> UpdateAsync(TDomain user, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<IdentityResult> UpdateAsync(TDomain user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -822,9 +830,9 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
                 throw new ArgumentNullException(nameof(user));
             }
 
-            await userRepository.UpdateAsync(user, cancellationToken);
+            userRepository.Update(user);
 
-            return IdentityResult.Success;
+            return Task.FromResult(IdentityResult.Success);
         }
     }
 }

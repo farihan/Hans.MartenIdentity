@@ -78,58 +78,58 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
 
 
 
-        public Task DeleteAsync(TDomain instance, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (IDocumentSession session = store.LightweightSession())
-            {
-                session.Delete(instance);
+        //public Task DeleteAsync(TDomain instance, CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    using (IDocumentSession session = store.LightweightSession())
+        //    {
+        //        session.Delete(instance);
 
-                return session.SaveChangesAsync(cancellationToken);
-            }
-        }
+        //        return session.SaveChangesAsync(cancellationToken);
+        //    }
+        //}
 
-        public Task<IList<TDomain>> FindAllAsync(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (IQuerySession session = store.QuerySession())
-            {
-                return session.Query<TDomain>().ToListAsync(cancellationToken);
-            }
-        }
+        //public Task<IList<TDomain>> FindAllAsync(CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    using (IQuerySession session = store.QuerySession())
+        //    {
+        //        return session.Query<TDomain>().ToListAsync(cancellationToken);
+        //    }
+        //}
 
-        public Task<IList<TDomain>> FindAllByAsync(Expression<Func<TDomain, bool>> where, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (IQuerySession session = store.QuerySession())
-            {
-                return session.Query<TDomain>().Where(where).ToListAsync(cancellationToken);
-            }
-        }
+        //public Task<IList<TDomain>> FindAllByAsync(Expression<Func<TDomain, bool>> where, CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    using (IQuerySession session = store.QuerySession())
+        //    {
+        //        return session.Query<TDomain>().Where(where).ToListAsync(cancellationToken);
+        //    }
+        //}
 
-        public Task<TDomain> FindOneByAsync(Expression<Func<TDomain, bool>> where, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (IQuerySession session = store.QuerySession())
-            {
-                return session.Query<TDomain>().SingleOrDefaultAsync(where, cancellationToken);
-            }
-        }
+        //public Task<TDomain> FindOneByAsync(Expression<Func<TDomain, bool>> where, CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    using (IQuerySession session = store.QuerySession())
+        //    {
+        //        return session.Query<TDomain>().SingleOrDefaultAsync(where, cancellationToken);
+        //    }
+        //}
 
-        public Task SaveAsync(TDomain instance, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (IDocumentSession session = store.LightweightSession())
-            {
-                session.Store(instance);
+        //public Task SaveAsync(TDomain instance, CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    using (IDocumentSession session = store.LightweightSession())
+        //    {
+        //        session.Store(instance);
 
-                return session.SaveChangesAsync(cancellationToken);
-            }
-        }
+        //        return session.SaveChangesAsync(cancellationToken);
+        //    }
+        //}
 
-        public Task UpdateAsync(TDomain instance, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (IDocumentSession session = store.LightweightSession())
-            {
-                session.Store(instance);
+        //public Task UpdateAsync(TDomain instance, CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    using (IDocumentSession session = store.LightweightSession())
+        //    {
+        //        session.Store(instance);
 
-                return session.SaveChangesAsync(cancellationToken);
-            }
-        }
+        //        return session.SaveChangesAsync(cancellationToken);
+        //    }
+        //}
     }
 }

@@ -12,6 +12,7 @@ using Hans.AspNetCore.Identity.Marten.Data;
 using Hans.AspNetCore.Identity.Marten.Data.Domains;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using Hans.AspNetCore.Identity.Marten.Services;
 
 namespace Hans.AspNetCore.Identity.Marten
 {
@@ -37,6 +38,10 @@ namespace Hans.AspNetCore.Identity.Marten
 
             // Add framework services.
             services.AddMvc();
+
+            // Add application services.
+            services.AddTransient<IEmailSender, AuthMessageSender>();
+            services.AddTransient<ISmsSender, AuthMessageSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,8 +61,8 @@ namespace Hans.AspNetCore.Identity.Marten
             }
 
             app.UseStaticFiles();
-
-            app.UseMartenIdentity();
+            //app.UseMartenIdentity();
+            app.UseIdentity();
 
             app.UseMvc(routes =>
             {

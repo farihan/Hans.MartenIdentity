@@ -16,11 +16,11 @@ namespace Hans.AspNetCore.Identity.Marten.Data.Persistence
         IQueryable<TDomain> FindAllBy(Expression<Func<TDomain, bool>> where);
         TDomain FindOneBy(Expression<Func<TDomain, bool>> where);
 
-        Task SaveAsync(TDomain instance, CancellationToken cancellationToken);
-        Task UpdateAsync(TDomain instance, CancellationToken cancellationToken);
-        Task DeleteAsync(TDomain instance, CancellationToken cancellationToken);
-        Task<IList<TDomain>> FindAllAsync(CancellationToken cancellationToken);
-        Task<IList<TDomain>> FindAllByAsync(Expression<Func<TDomain, bool>> where, CancellationToken cancellationToken);
-        Task<TDomain> FindOneByAsync(Expression<Func<TDomain, bool>> where, CancellationToken cancellationToken);
+        //Task SaveAsync(TDomain instance, CancellationToken cancellationToken);
+        //Task UpdateAsync(TDomain instance, CancellationToken cancellationToken);
+        //Task DeleteAsync(TDomain instance, CancellationToken cancellationToken);
+        //Task<IList<TDomain>> FindAllAsync(CancellationToken cancellationToken);
+        //Task<IList<TDomain>> FindAllByAsync(Expression<Func<TDomain, bool>> where, CancellationToken cancellationToken);
+        //Task<TDomain> FindOneByAsync(Expression<Func<TDomain, bool>> where, CancellationToken cancellationToken);
     }
 }

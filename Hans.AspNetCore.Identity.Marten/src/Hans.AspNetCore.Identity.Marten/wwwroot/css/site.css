@@ -33,6 +33,16 @@ textarea {
 @media screen and (max-width: 767px) {
   /* Hide captions */
   .carousel-caption {
-    display: none
+    display: none;
   }
+}
+
+.form-horizontal .control-label-left {
+    text-align: left;
+}
+
+.validation-summary-errors {
+    background-color: #cc0000;
+    border-color: #bd001f;
+    color: #ffffff;
 }

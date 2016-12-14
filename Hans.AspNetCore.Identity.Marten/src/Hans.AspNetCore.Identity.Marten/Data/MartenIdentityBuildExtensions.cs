@@ -19,11 +19,26 @@ namespace Hans.AspNetCore.Identity.Marten.Data
             where TUser : IdentityUser
             where TRole : IdentityRole
         {
+            services.AddAuthentication(options =>
+            {
+                // default value for ExternalCookieAuthenticationScheme
+                options.SignInScheme = new IdentityCookieOptions().ExternalCookieAuthenticationScheme;
+            });
+
             services.AddScoped<IDocumentStore>(provider => DocumentStore.For(configure =>
             {
                 configure.Connection(connection);
                 configure.AutoCreateSchemaObjects = AutoCreate.All;
+
+                var optionsAccessor = provider.GetRequiredService<IOptions<IdentityOptions>>();
+                configure.ConfigureIdentityStoreOptions<IdentityUser, string>(optionsAccessor.Value);
             }));
+
+            services.AddSingleton<IdentityMarkerService>();
+
+            services.AddScoped<IUserValidator<IdentityUser>, UserValidator<IdentityUser>>();
+            services.AddScoped<IPasswordValidator<IdentityUser>, PasswordValidator<IdentityUser>>();
+            services.AddScoped<ISecurityStampValidator, SecurityStampValidator<IdentityUser>>();
 
             services.AddTransient<IPasswordHasher<IdentityUser>, PasswordHasher<IdentityUser>>();
             services.AddTransient<ILookupNormalizer, LowerInvariantLookupNormalizer>();
